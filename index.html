@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Info5100 Project2</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script src="http://code.jquery.com/jquery-2.2.3.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script src="project2.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div id="container">
+      <h1 class="centeredtext">Cornell University Off-Campus Housing</h1>
+
+      <p class="centeredtext">Found an apartment you're interested in? Hover over it to get more details!</p>
+
+      <div id="map"></div>
+
+      <div id="filters">
+        <div id="filter-bedroom">
+          <p># of Bedrooms:</p>
+          <select id="roomSelect">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div id="filter-rent">
+          <p>
+            <label for="rent-range-input">Monthly Rent Per Person:</label>
+            $ <input type="text" id="rent-range-input" readonly style="border:0;font-weight:bold;">
+          </p>
+          <div id="rent-range-slider">
+            <div id="rent-range" style="width:300px;margin:10px"></div>
+          </div>
+          <span style="float:left" id="rent-range-min"></span>
+          <span style="float:right" id="rent-range-max"></span>
+        </div>
+        <div id="filter-walkscore">
+          <p>
+            <label for="walkscore-range-input">Walk Score:</label>
+            <input type="text" id="walkscore-range-input" readonly style="border:0;font-weight:bold;">
+          </p>
+          <div id="walkscore-range-slider">
+            <div id="walkscore-range" style="width:300px;margin:10px"></div>
+          </div>
+          <span style="float:left" id="walkscore-range-min">0</span>
+          <span style="float:right" id="walkscore-range-max">100</span>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+
+
+    <p class="centeredtext">What is WalkScore? WalkScore measures how friendly an apartment location
+      is for pedestrians!</p>
+
+    <table style="margin-left:auto;margin-right:auto">
+      <tr id = tableHeader>
+        <th>Walk Score®</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <th>90–100</th>
+        <td><b>Walker's Paradise</b><br>Daily errands do not require a car.</td>
+      </tr>
+      <tr>
+        <th>70–89</th>
+        <td><b>Very Walkable</b><br>Most errands can be accomplished on foot.</td>
+      </tr>
+      <tr>
+        <th>50–69</th>
+        <td><b>Somewhat Walkable</b><br>Some errands can be accomplished on foot.</td>
+      </tr>
+      <tr>
+        <th>25–49</th>
+        <td><b>Car-Dependent</b><br>Most errands require a car.</td>
+      </tr>
+      <tr>
+        <th>0–24</th>
+        <td><b>Car-Dependent</b><br>Almost all errands require a car.</td>
+      </tr>
+    </table>
+
+    <p class="centeredtext">For more information, see <a href="https://www.walkscore.com/">WalkScore.com</a>.</p>
+  </body>
+</html>
