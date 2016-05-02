@@ -1,159 +1,92 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html>
   <head>
-    <meta charset="UTF-8">
-    <title>Project Cornell Off-Campus Housing by RioAmazonas</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <title>Info5100 Project2</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script src="http://code.jquery.com/jquery-2.2.3.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script src="project2.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
-    <section class="page-header">
-      <h1 class="project-name">Project Cornell Off-Campus Housing</h1>
-      <h2 class="project-tagline"></h2>
-      <a href="https://github.com/RioAmazonas/INFO5100_Project2" class="btn">View on GitHub</a>
-      <a href="https://github.com/RioAmazonas/INFO5100_Project2/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/RioAmazonas/INFO5100_Project2/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+    <div id="container">
+      <h1 class="centeredtext">Cornell University Off-Campus Housing</h1>
 
-    <section class="main-content">
-      <h2>
-<a id="welcome-to-our-team-project-cornell-off-campus-housing" class="anchor" href="#welcome-to-our-team-project-cornell-off-campus-housing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to our team project Cornell Off-Campus Housing</h2>
+      <p class="centeredtext">Found an apartment you're interested in? Hover over it to get more details!</p>
 
-<p>Each year, Cornell students have difficulty finding the perfect housing for the upcoming
-academic year. Many Cornell students do not have a car as they often travel from distant
-locations via plane, so finding an apartment that lends itself to walking is extremely
-important. These convenient locations are extremely desireable, so they also typically have
-extremely high rent. Sifting through the available listings to find an apartment in a good,
-walkable location with reasonable rent is difficult, primarily due to the lack of useful tools
-that facilitate obtaining the necessary information to compare different options and to make
-the right decision. Although Cornell does offer the Off Housing Listing Service
-( https://sf‐sas‐app‐002.serverfarm.cornell.edu:7793/och ), it simply gives a list of all the
-housing depending on the filters selected and does not provide much insight unless the
-student already knows what specific type of housing one is looking for.</p>
+      <div id="map"></div>
 
-<p>By plotting available housings on an interactive map and providing different visual cues for
-the rent and the walkability, we believe our visualization greatly helps students spot
-affordable as well as convenient housings at a glance. A student unfamiliar with Ithaca that is
-looking for housing can easily see how the walkability of an apartment location translates to
-the cost of rent in this area. In addition, an outlier that has a good Walk Score but also fairly
-cheap rent will be clearly identified as a green, opaque point, so someone searching for an
-apartment can easily find them. Lastly, the ability to hover over a point to get more
-information about a listing provides a good balance of information ‐ the map doesn’t cause
-information overload at a glance, but all of the data is easily available if someone is
-interested in a particular listing.</p>
+      <div id="filters">
+        <div id="filter-bedroom">
+          <p># of Bedrooms:</p>
+          <select id="roomSelect">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div id="filter-rent">
+          <p>
+            <label for="rent-range-input">Monthly Rent Per Person:</label>
+            $ <input type="text" id="rent-range-input" readonly style="border:0;font-weight:bold;">
+          </p>
+          <div id="rent-range-slider">
+            <div id="rent-range" style="width:300px;margin:10px"></div>
+          </div>
+          <span style="float:left" id="rent-range-min"></span>
+          <span style="float:right" id="rent-range-max"></span>
+        </div>
+        <div id="filter-walkscore">
+          <p>
+            <label for="walkscore-range-input">Walk Score:</label>
+            <input type="text" id="walkscore-range-input" readonly style="border:0;font-weight:bold;">
+          </p>
+          <div id="walkscore-range-slider">
+            <div id="walkscore-range" style="width:300px;margin:10px"></div>
+          </div>
+          <span style="float:left" id="walkscore-range-min">0</span>
+          <span style="float:right" id="walkscore-range-max">100</span>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
 
-<h2>
-<a id="data" class="anchor" href="#data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Data</h2>
 
-<p>First, we obtained the off‐campus housing data from Cornell University’s Off Campus Housing
-Listing Services (https://sf‐sas‐app‐002.serverfarm.cornell.edu:7793/och). We wrote a jQuery
-script to scrape the data and save it as a json file. This first set of data included:
-● Address : the address of the housing</p>
+    <p class="centeredtext">What is WalkScore? WalkScore measures how friendly an apartment location
+      is for pedestrians!</p>
 
-<p>● Date available : when the housing is available
-● Neighborhood : region which the housing belongs to
-● Rent : rent per month
-● Lease length : minimum length of the lease
-● Bedrooms : number of rooms
-● Distance : distance from Cornell University</p>
+    <table style="margin-left:auto;margin-right:auto">
+      <tr id = tableHeader>
+        <th>Walk Score®</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <th>90–100</th>
+        <td><b>Walker's Paradise</b><br>Daily errands do not require a car.</td>
+      </tr>
+      <tr>
+        <th>70–89</th>
+        <td><b>Very Walkable</b><br>Most errands can be accomplished on foot.</td>
+      </tr>
+      <tr>
+        <th>50–69</th>
+        <td><b>Somewhat Walkable</b><br>Some errands can be accomplished on foot.</td>
+      </tr>
+      <tr>
+        <th>25–49</th>
+        <td><b>Car-Dependent</b><br>Most errands require a car.</td>
+      </tr>
+      <tr>
+        <th>0–24</th>
+        <td><b>Car-Dependent</b><br>Almost all errands require a car.</td>
+      </tr>
+    </table>
 
-<p>To allow users to compare rent more easily across all housings regardless of the bedroom
-counts, we created an extra variable: rent per person. We divided the rent by the number of
-bedrooms, assuming that each bedroom (including the studio) will hold only one person</p>
-
-<p>● Rent per person : arithmetic average of rent per bedroom</p>
-
-<p>Second, to quantify the walkability of each housing, we collected Walk Scores from
-WalkScore.com ( <a href="https://www.walkscore.com">https://www.walkscore.com</a> ). Then, to later plot housings on a map, we
-converted each address into latitude and longitude using LatLong.net
-( <a href="http://www.latlong.net">http://www.latlong.net</a> ). So our second set of data included:
-● Address : the address of the housing
-● Walk Score : Walk Score of the housing
-● Latitude : latitude coordinate of the address
-● Longitude : longitude coordinate of the address
-Next, we needed to clean and merge our data. We noticed some unreasonable values for the
-rent: for example, the rent for a housing with 4 bedrooms located in Collegetown was
-$600/month, which clearly seemed like it was the rent for one bedroom in a 4 bedroom
-housing rather than the rent for all 4 bedrooms. So, taking the number of bedrooms and the
-location into consideration, we re‐examined the rent per person for each listing (paying close
-attention to housings with less than $400 rent per person). Finally, our JavaScript code that
-powers the visualization merges these two data sets as its first step, using the address as the
-key, so that all of the data can be used easily.</p>
-
-<h2>
-<a id="visualization" class="anchor" href="#visualization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Visualization</h2>
-
-<p>We wanted to visualize our data on a single map so that the users can easily determine
-whether the rent is reasonable based on the location and whether that place convenient for
-those without a car. We used Google Maps API to provide zooming, local businesses and
-services information, and street views and used the JavaScript D3 library to plot each listing
-on the map as a circle.</p>
-
-<p>We used color to represent different levels of rent per bedroom. As it is common that green is
-used for indicating underbudget and red is used for indicating overbudget, we set the color
-from green to red as a linear scale for the domain of 100‐1800. We hardcoded this scale for
-our dataset (and set our slider to match) rather than simply using the minimum and maximum
-rent values because otherwise a single outlier could completely skew the results. This would
-still be valid if this dataset were to be updated in the future as rent in Ithaca does not change
-that drastically from year‐to‐year, but may need to be changed if this were to be reused with
-another location (such as San Francisco, for example).</p>
-
-<p>var colorScale = d3.scale.linear().domain([100,900,1800]).range(["green","yellow","red"]);</p>
-
-<p>We used opacity to represent different levels of Walk Score. In order to help our users to
-more easily identify housings that are convenient for living, we set higher opacity for those
-with high Walk Scores (so that they are more visible) and lower opacity for those with lower
-Walk Scores. Note that a WalkScore of zero does not make the point fully transparent, as we
-want those locations to still be visible on the map ‐ thus, the opacity ranges from 0.2 to 1. In
-addition, regardless of the Walk Score the border of the point is fully opaque, to make sure
-the points can be found easily.</p>
-
-<p>var opacityScale = d3.scale.linear().domain([0,100]).range([0.2,1]);</p>
-
-<p>In order to make our data circles more noticeable, we transformed the map which originally
-had many colors into grayscale, so that the color scale we used to indicate the cost of rent
-was more noticeable.</p>
-
-<p>By using D3 and jQuery, we created three filters which dynamically updates the points on the
-map based on the criteria of the user, so that they can find all the possible housing within
-their budget and desired walkability and ignore listings that aren’t suitable (such as those
-with many bedrooms when they intend on living by themselves):</p>
-
-<p>● Room type selector : Number of bedrooms in the apartment (or Studio)
-● Rent selector : Selects the range of rent per bedroom ‐ when a new Room Type is
-selected, this will change to match the minimum and maximum rent per person of that
-room type.
-● Walk Score selecto r: Walk Score from 0 to 100</p>
-
-<p>Finally, we added a hover‐over action to each data circle to display a popup information
-window that displays more detailed information for that housing such as neighborhood,
-distance to Cornell, date available, lease length, etc., to make that data available in case the
-user is interested in a particular listing without incurring information overload on the main
-map.</p>
-
-<h2>
-<a id="citations" class="anchor" href="#citations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Citations</h2>
-
-<p>Source of dataset:
-● Cornell University’s Off Campus Housing Listing Service:
-https://sf‐sas‐app‐002.serverfarm.cornell.edu:7793/och
-● Walk Score: <a href="https://www.walkscore.com">https://www.walkscore.com</a>
-● Latitude &amp; Longitude: <a href="http://www.latlong.net">http://www.latlong.net</a>
-Reference:
-● Google Maps APIs: <a href="https://developers.google.com/maps">https://developers.google.com/maps</a>
-● Google Maps + D3: <a href="http://bl.ocks.org/mbostock/899711">http://bl.ocks.org/mbostock/899711</a></p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/RioAmazonas/INFO5100_Project2">Project Cornell Off-Campus Housing</a> is maintained by <a href="https://github.com/RioAmazonas">RioAmazonas</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-  
+    <p class="centeredtext">For more information, see <a href="https://www.walkscore.com/">WalkScore.com</a>.</p>
   </body>
 </html>
